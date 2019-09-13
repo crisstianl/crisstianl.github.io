@@ -1,9 +1,4 @@
-/*
-	Phantom by HTML5 UP
-	html5up.net | @ajlkn
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
-*/
-
+/* JQuery */
 (function($) {
 
 	var	$window = $(window),
@@ -183,3 +178,26 @@
 			});
 
 })(jQuery);
+
+/* Make Ajax request to email server */
+function do_email(form) {
+	let jsonObject = {
+		key : "",
+		subject : "Github contact form",
+		from : form['name'].value,
+		from_address : form['email'].value,
+		message : form['message'].value
+	};
+
+	let xhttp = new XMLHttpRequest();
+	xhttp.timeout = 3000;
+	xhttp.onreadystatechange = function() {
+		if (4 == this.readyState) {
+		console.log("server do_email() returned " + this.status + ": " + this.statusText);		
+		}
+	};
+	xhttp.open("POST", "https://mandrillapp.com/api/1.0/messages/send.json", true);
+	xhttp.setRequestHeader("Content-type", "application/json");
+	xhttp.send(JSON.stringify(jsonObject));
+	return false;
+}
