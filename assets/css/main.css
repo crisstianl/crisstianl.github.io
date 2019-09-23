@@ -2703,7 +2703,11 @@ section.special, article.special {
 
 #skills ul li {
 	display: inline-block;
-	min-width: 80px;
+	min-width: 100px;
+}
+
+#skills svg {
+	display: inline-block;
 }
 
 body:not(.is-touch) .tiles article:hover > .image {
