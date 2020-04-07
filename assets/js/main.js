@@ -1,187 +1,234 @@
 /* JQuery */
 (function($) {
 
+	// variables
 	var	$window = $(window),
-		$body = $('body');
+		$body = $('body'),
+		$main = $('#main'),
+		$form = $('form'),
+		$menu = $('#menu');
 
 	// Breakpoints.
-		breakpoints({
-			xlarge:   [ '1281px',  '1680px' ],
-			large:    [ '981px',   '1280px' ],
-			medium:   [ '737px',   '980px'  ],
-			small:    [ '481px',   '736px'  ],
-			xsmall:   [ '361px',   '480px'  ],
-			xxsmall:  [ null,      '360px'  ]
-		});
+	breakpoints({
+		xlarge:   [ '1281px',  '1680px' ],
+		large:    [ '981px',   '1280px' ],
+		medium:   [ '737px',   '980px'  ],
+		small:    [ '481px',   '736px'  ],
+		xsmall:   [ '361px',   '480px'  ],
+		xxsmall:  [ null,      '360px'  ]
+	});
 
-	// Play initial animations on page load.
-		$window.on('load', function() {
-			window.setTimeout(function() {
-				$body.removeClass('is-preload');
-			}, 100);
-		});
+	// initialization
+	$window.on('load', function() {
+		// Play initial animations on page load.
+		window.setTimeout(function() {
+			$body.removeClass('is-preload');
+		}, 100);
+
+		on_load();
+	});
 
 	// Touch?
-		if (browser.mobile)
-			$body.addClass('is-touch');
+	if (browser.mobile) {
+		$body.addClass('is-touch');
+	}
 
-	// Forms.
-		var $form = $('form');
+	// Auto-resizing textareas.
+	$form.find('textarea').each(function() {
+		var $this = $(this),
+			$wrapper = $('<div class="textarea-wrapper"></div>'),
+			$submits = $this.find('input[type="submit"]');
 
-		// Auto-resizing textareas.
-			$form.find('textarea').each(function() {
+		$this.wrap($wrapper)
+			.attr('rows', 1)
+			.css('overflow', 'hidden')
+			.css('resize', 'none')
+			.on('keydown', function(event) {
+				if (event.keyCode == 13 && event.ctrlKey) {
+					event.preventDefault();
+					event.stopPropagation();
+					$(this).blur();
+				}
 
-				var $this = $(this),
-					$wrapper = $('<div class="textarea-wrapper"></div>'),
-					$submits = $this.find('input[type="submit"]');
+			}).on('blur focus', function() {
+				$this.val($.trim($this.val()));
 
-				$this
-					.wrap($wrapper)
-					.attr('rows', 1)
-					.css('overflow', 'hidden')
-					.css('resize', 'none')
-					.on('keydown', function(event) {
+			}).on('input blur focus --init', function() {
+				$wrapper.css('height', $this.height());
+				$this.css('height', 'auto').css('height', $this.prop('scrollHeight') + 'px');
 
-						if (event.keyCode == 13
-						&&	event.ctrlKey) {
+			}).on('keyup', function(event) {
+				if (event.keyCode == 9) {
+					$this.select();
+				}
 
-							event.preventDefault();
-							event.stopPropagation();
+			}).triggerHandler('--init');
 
-							$(this).blur();
+		// Fix.
+		if (browser.name == 'ie' || browser.mobile) {
+			$this.css('max-height', '10em').css('overflow-y', 'auto');
+		}
+	});
 
-						}
+	// Menu functions
+	$menu.wrapInner('<div class="inner"></div>');
+	$menu._locked = false;
+	$menu._lock = function() {
+		if ($menu._locked) {
+			return false;
+		}
 
-					})
-					.on('blur focus', function() {
-						$this.val($.trim($this.val()));
-					})
-					.on('input blur focus --init', function() {
+		$menu._locked = true;
 
-						$wrapper
-							.css('height', $this.height());
+		window.setTimeout(function() {
+			$menu._locked = false;
+		}, 350);
 
-						$this
-							.css('height', 'auto')
-							.css('height', $this.prop('scrollHeight') + 'px');
+		return true;
+	};
 
-					})
-					.on('keyup', function(event) {
+	$menu._show = function() {
+		if ($menu._lock()) 
+			$body.addClass('is-menu-visible');
+	};
 
-						if (event.keyCode == 9)
-							$this
-								.select();
+	$menu._hide = function() {
+		if ($menu._lock())
+			$body.removeClass('is-menu-visible');
+	};
 
-					})
-					.triggerHandler('--init');
+	$menu._toggle = function() {
+		if ($menu._lock())
+			$body.toggleClass('is-menu-visible');
+	};
 
-				// Fix.
-					if (browser.name == 'ie'
-					||	browser.mobile)
-						$this
-							.css('max-height', '10em')
-							.css('overflow-y', 'auto');
+	$menu.appendTo($body)
+		.on('click', function(event) {
+			event.stopPropagation();
 
-			});
+		}).on('click', 'a', function(event) {
+			var href = $(this).attr('href');
 
-	// Menu.
-		var $menu = $('#menu');
+			event.preventDefault();
+			event.stopPropagation();
 
-		$menu.wrapInner('<div class="inner"></div>');
+			// Hide.
+			$menu._hide();
 
-		$menu._locked = false;
-
-		$menu._lock = function() {
-
-			if ($menu._locked)
-				return false;
-
-			$menu._locked = true;
+			// Redirect.
+			if (href == '#menu')
+				return;
 
 			window.setTimeout(function() {
-				$menu._locked = false;
+				window.location.href = href;
 			}, 350);
 
-			return true;
+		}).append('<a class="close" href="#menu">Close</a>');
 
-		};
+	// body functions
+	$body.on('click', 'a[href="#menu"]', function(event) {
+			event.stopPropagation();
+			event.preventDefault();
 
-		$menu._show = function() {
+			// Toggle.
+			$menu._toggle();
 
-			if ($menu._lock())
-				$body.addClass('is-menu-visible');
+		}).on('click', function(event) {
+			$menu._hide();
 
-		};
-
-		$menu._hide = function() {
-
-			if ($menu._lock())
-				$body.removeClass('is-menu-visible');
-
-		};
-
-		$menu._toggle = function() {
-
-			if ($menu._lock())
-				$body.toggleClass('is-menu-visible');
-
-		};
-
-		$menu
-			.appendTo($body)
-			.on('click', function(event) {
-				event.stopPropagation();
-			})
-			.on('click', 'a', function(event) {
-
-				var href = $(this).attr('href');
-
-				event.preventDefault();
-				event.stopPropagation();
-
-				// Hide.
-					$menu._hide();
-
-				// Redirect.
-					if (href == '#menu')
-						return;
-
-					window.setTimeout(function() {
-						window.location.href = href;
-					}, 350);
-
-			})
-			.append('<a class="close" href="#menu">Close</a>');
-
-		$body
-			.on('click', 'a[href="#menu"]', function(event) {
-
-				event.stopPropagation();
-				event.preventDefault();
-
-				// Toggle.
-					$menu._toggle();
-
-			})
-			.on('click', function(event) {
-
-				// Hide.
-					$menu._hide();
-
-			})
-			.on('keydown', function(event) {
-
-				// Hide on escape.
-					if (event.keyCode == 27)
-						$menu._hide();
-
-			});
+		}).on('keydown', function(event) {
+			// Hide on escape.
+			if (event.keyCode == 27) {
+				$menu._hide();
+			}
+		});
 
 })(jQuery);
 
+function on_load() {
+	load_skills();
+	load_profile();
+}
+
+function load_skills() {
+	const container = document.getElementById('skills');
+	for (let i = 0; i < SKILLS.length; i++) {
+		const list = document.createElement("ul");
+		container.appendChild(list);
+
+		if (SKILLS[i].svg) { // icon
+			const icon = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+			icon.setAttributeNS(null, "width", "24");
+			icon.setAttributeNS(null, "heigth", "24");
+			icon.setAttributeNS(null, "viewBox", SKILLS[i].svg.viewBox);
+			list.appendChild(icon);
+	
+			if (SKILLS[i].svg.path) { // svg path
+				for (let j = 0; j < SKILLS[i].svg.path.length; j++) {
+					const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+					path.setAttributeNS(null, "d", SKILLS[i].svg.path[j].d);
+					path.setAttributeNS(null, "fill", SKILLS[i].svg.path[j].fill);
+					icon.appendChild(path);
+				}
+			}
+		}
+
+		for (let j = 0; j < SKILLS[i].stack.length; j++) {
+			let item = document.createElement("li");
+			item.innerHTML = SKILLS[i].stack[j];
+			list.appendChild(item);
+		}
+	}
+}
+
+function load_profile() {
+	const container = document.getElementById('projects'); 
+	for (let i = 0; i < PROJECTS.length; i++) {
+		let item = create_article(i, PROJECTS[i]);
+		container.appendChild(item);
+	}
+}
+
+function create_article(index, project) {
+	const article = document.createElement("article");
+	article.classList.add("item", "thumb", "style" + (index % 6 + 1));
+
+	const span = document.createElement("span");
+	span.className = "image";
+	article.appendChild(span);
+
+	const img = document.createElement("img");
+	img.src = "images/pic01.jpg";
+	img.alt = "alt";
+	span.appendChild(img);
+
+	const link = document.createElement("a");
+	link.href = project != null ? project.source : "#";
+	link.target = "_blank";
+	article.appendChild(link);
+
+	const h2 = document.createElement("h2");
+	h2.innerHTML = project != null ? project.name : "New";
+	link.appendChild(h2);
+
+	const div = document.createElement("div");
+	div.className = "content";
+	link.appendChild(div);
+
+	const p1 = document.createElement("p");
+	p1.innerHTML = project != null ? project.description : "Not available";
+	div.appendChild(p1);
+
+	const p2 = document.createElement("p");
+	p2.innerHTML = project != null ? "<i>" + project.stack + "</i>" : "";
+	div.appendChild(p2);
+
+	return article;
+}
+
 /* Make Ajax request to email server */
 function do_email(form) {
-	let jsonObject = {
+	const payload = {
 		key : "",
 		subject : "Github contact form",
 		from : form['name'].value,
@@ -189,15 +236,15 @@ function do_email(form) {
 		message : form['message'].value
 	};
 
-	let xhttp = new XMLHttpRequest();
+	const xhttp = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP");
 	xhttp.timeout = 3000;
 	xhttp.onreadystatechange = function() {
 		if (4 == this.readyState) {
-		console.log("server do_email() returned " + this.status + ": " + this.statusText);		
+			console.log("server do_email() returned " + this.status + ": " + this.statusText);
 		}
 	};
 	xhttp.open("POST", "https://mandrillapp.com/api/1.0/messages/send.json", true);
 	xhttp.setRequestHeader("Content-type", "application/json");
-	xhttp.send(JSON.stringify(jsonObject));
+	xhttp.send(JSON.stringify(payload));
 	return false;
 }
