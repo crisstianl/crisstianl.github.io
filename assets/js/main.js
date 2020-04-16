@@ -143,6 +143,42 @@
 			}
 		});
 
+	// Poptrox.
+	$body.poptrox({
+		baseZIndex: 20000,
+		album: 'article.item',
+		selector: 'div.gallery > a',
+		onPopupClose: function() { 
+			$body.removeClass('modal-active');
+		},
+		onPopupOpen: function() { 
+			$body.addClass('modal-active'); 
+		},
+		fadeSpeed: 300,
+		overlayOpacity: 0,
+		popupCloserText: '',
+		popupLoaderText: '',
+		popupSpeed: 300,
+		popupWidth: 200,
+		popupHeight: 150,
+		usePopupCaption: true,
+		usePopupCloser: true,
+		usePopupDefaultStyling: false,
+		usePopupForceClose: true,
+		usePopupLoader: true,
+		usePopupNav: true,
+		windowMargin: 50
+	});
+
+	// Set margins to 0 when 'xsmall' activates.
+	breakpoints.on('<=xsmall', function() {
+		$body.poptrox.windowMargin = 0;
+	});
+
+	breakpoints.on('>xsmall', function() {
+		$body.poptrox.windowMargin = 50;
+	});
+
 })(jQuery);
 
 function on_load() {
@@ -190,38 +226,58 @@ function load_profile() {
 }
 
 function create_article(index, project) {
+	// container
 	const article = document.createElement("article");
 	article.classList.add("item", "thumb", "style" + (index % 6 + 1));
 
+	// background
 	const span = document.createElement("span");
 	span.className = "image";
 	article.appendChild(span);
 
 	const img = document.createElement("img");
-	img.src = "images/pic01.jpg";
+	img.src = "assets/images/thumb.jpg";
 	img.alt = "alt";
 	span.appendChild(img);
 
+	// content
 	const link = document.createElement("a");
-	link.href = project != null ? project.source : "#";
+	link.className = "link";
+	link.href = project.source;
 	link.target = "_blank";
 	article.appendChild(link);
 
+	// title
 	const h2 = document.createElement("h2");
-	h2.innerHTML = project != null ? project.name : "New";
+	h2.innerHTML = project.name;
 	link.appendChild(h2);
 
+	// subtitle
 	const div = document.createElement("div");
 	div.className = "content";
 	link.appendChild(div);
 
 	const p1 = document.createElement("p");
-	p1.innerHTML = project != null ? project.description : "Not available";
+	p1.innerHTML = project.description;
 	div.appendChild(p1);
 
 	const p2 = document.createElement("p");
-	p2.innerHTML = project != null ? "<i>" + project.stack + "</i>" : "";
+	p2.innerHTML = "<i>" + project.stack + "</i>";
 	div.appendChild(p2);
+
+	// screenshots
+	if (project.screenshots && project.screenshots.length > 0) {
+		const div2 = document.createElement("div");
+		div2.className = "gallery";
+		article.appendChild(div2);
+
+		for (let i = 0; i < project.screenshots.length; i++) {
+			const screenLink = document.createElement("a");
+			screenLink.href = project.screenshots[i];
+			screenLink.title = project.name + " " + (i + 1) + " / " + project.screenshots.length;
+			div2.appendChild(screenLink);
+		}
+	}
 
 	return article;
 }
