@@ -14,20 +14,6 @@ const PROJECTS = [
         ]
     },
     {
-        name : "Openweather",
-        description : "Weather forecast in Europe, America, Asia, Africa and Australia based on Open Weather services.",
-        stack : "OpenWeatherMap API, Geolocation API, Google Maps, Javascript, Ajax, Java EE, SpringBoot",
-        source : "https://github.com/crisstianl/weather-service",
-        screenshots : [
-            "images/openweather_iasi.png",
-            "images/openweather_amsterdam.png",
-            "images/openweather_guatemala.png",
-            "images/openweather_san_jose.png",
-            "images/openweather_los_angeles.png",
-            "images/openweather_targu_mures.png",
-        ]
-    },
-    {
         name : "Paweo",
         description : "Stream, playlist and share your favorite videos on Youtube using this website.",
         stack : "Youtube API, PopcornJS, Javascript, JQuery, IndexDB",
@@ -42,21 +28,59 @@ const PROJECTS = [
         ]
     },
     {
+        name : "Restaurant Management System",
+        description : "Enterprise application for optymyzing backend operations for a private restaurant, such as placing orders, managing stocks, communication, tracking employees.",
+        stack : "Android SDK 19, JavaServer Faces, Primefaces, Hibernate, Rest API, H2 Database",
+        source : "https://github.com/crisstianl/restaurant-management",
+        screenshots : [
+            "images/ross-mobile_login.png",
+            "images/ross-mobile_home.png",
+            "images/ross-mobile_contacts.png",
+            "images/ross-mobile_items_p1.png",
+            "images/ross-mobile_items_p2.png",
+            "images/ross-mobile_order.png",
+            "images/ross-mobile_order_details.png",
+            "images/ross-mobile_orders_drafts.png",
+            "images/ross-mobile_orders_sent.png",
+            "images/ross-mobile_orders_ready.png",
+            "images/ross-web_orders.png",
+            "images/ross-web_orders_new.png",
+            "images/ross-web_order_rows.png",
+            "images/ross-web_products.png",
+            "images/ross-web_employees.png",
+            "images/ross-web_contacts.png"
+        ]
+    },
+    {
+        name : "Openweather",
+        description : "Weather forecast in Europe, America, Asia, Africa and Australia based on Open Weather services.",
+        stack : "OpenWeatherMap API, Geolocation API, Google Maps, Javascript, Ajax, Java EE, SpringBoot",
+        source : "https://github.com/crisstianl/weather-service",
+        screenshots : [
+            "images/openweather_iasi.png",
+            "images/openweather_amsterdam.png",
+            "images/openweather_guatemala.png",
+            "images/openweather_san_jose.png",
+            "images/openweather_los_angeles.png",
+            "images/openweather_targu_mures.png",
+        ]
+    },
+    {
         name : "Computer Algorithms",
-        description : "Collection of most common computer algorithms for sorting, searching or brainstorming problems implemented in Java.",
+        description : "Collection of most common computer algorithms for sorting, searching or logical problems implemented in Java.",
         stack : "Sorting, structures, logical, gotcha",
-        source : "https://github.com/crisstianl/java-algorithms"
+        source : "https://github.com/crisstianl/computer-algorithms"
     },
     {
         name : "Bluetooth security",
-        description : "Comprehensive analysis of Bluetooth 2 and 4 specifiction.",
+        description : "Comprehensive analysis of Bluetooth generations 2nd and 4th.",
         stack : "Security stack, pairing protocol, cryptographic functions, attacks, solutions",
         source : "https://github.com/crisstianl/Bluetooth-security"
     },
     {
-        name : "Paybox",
-        description : "Suite of 3 simple modules: \"payment_ui\" the html/javascript application making requests to server,  \"payment_service\" the rest endpoints and \"payment_persistence\" the database access layer.",
-        stack : "Javascript, Ajax, Jersey, Fasterxml, EclipseLink, Mockito, Maven",
-        source : "https://github.com/crisstianl/Payment-portal"
+        name : "Online Banking",
+        description : "Suite of 3 applications that provide simple online banking functionalities, such finding the balance, making withdraws, or closing accounts.",
+        stack : "Javascript, Ajax, Jersey Rest, Fasterxml, EclipseLink, Junit, Mockito, Maven",
+        source : "https://github.com/crisstianl/online-banking"
     }
 ];
