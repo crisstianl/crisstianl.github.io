@@ -136,11 +136,9 @@ a {
 	transition: border-bottom-color 0.2s ease, color 0.2s ease;
 	text-decoration: none;
 	color: #585858;
-	border-bottom: dotted 1px rgba(88, 88, 88, 0.5);
 }
 
 a:hover {
-	border-bottom-color: transparent;
 	color: #f2849e !important;
 }
 
@@ -184,7 +182,7 @@ h1 a {
 h2, h3, h4, h5, h6 {
 	font-weight: 900;
 	line-height: 1.5;
-	margin: 0 0 2em 0;
+	margin: 1em 0 1em 0;
 	text-transform: uppercase;
 	letter-spacing: 0.35em;
 }
@@ -2537,7 +2535,7 @@ section.special, article.special {
 
 #skills ul li {
 	display: inline-block;
-	color: 	#DC143C;
+	color: 	#955fb9;
 	min-width: 100px;
 }
 
@@ -2556,7 +2554,7 @@ section.special, article.special {
 	-ms-flex-wrap: wrap;
 	flex-wrap: wrap;
 	position: relative;
-	margin: 2em 0 0 -2.5em;
+	margin: 0 0 0 -2.5em;
 }
 
 .tiles article {

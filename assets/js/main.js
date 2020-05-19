@@ -284,23 +284,42 @@ function create_article(index, project) {
 
 /* Make Ajax request to email server */
 function do_email(form) {
+	if (!form['name'].value || form['name'].value.length < 5) {
+		window.alert("Name is missing");
+		return false;
+	}
+	if (!form['email'].value || form['email'].value.length  < 7) {
+		window.alert("Email address is missing");
+		return false;
+	}
+	if (!form['message'].value || form['message'].value.length  < 10) {
+		window.alert("Message is missing");
+		return false;
+	}
+
 	const payload = {
 		key : "",
-		subject : "Github contact form",
-		from : form['name'].value,
-		from_address : form['email'].value,
-		message : form['message'].value
+		to : "info@gmail.com",
+		from : "From " + form['name'].value + " " + form['email'].value,
+		subject : "Message from github.io",
+		plain : form['message'].value
 	};
 
-	const xhttp = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP");
+	let xhttp = null;
+	if (window.XMLHttpRequest) {
+		xhttp = new XMLHttpRequest();
+	} else {
+		xhttp = new ActiveXObject("Microsoft.XMLHTTP");
+	}
+
 	xhttp.timeout = 3000;
 	xhttp.onreadystatechange = function() {
 		if (4 == this.readyState) {
-			console.log("server do_email() returned " + this.status + ": " + this.statusText);
+			console.log("HTTP " + this.status + " " + this.statusText);
 		}
 	};
-	xhttp.open("POST", "https://mandrillapp.com/api/1.0/messages/send.json", true);
-	xhttp.setRequestHeader("Content-type", "application/json");
+	xhttp.open("POST", "https://www.googleapis.com/auth/gmail.send", true);
+	xhttp.setRequestHeader("Content-type", "message/rfc822");
 	xhttp.send(JSON.stringify(payload));
 	return false;
 }

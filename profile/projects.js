@@ -28,7 +28,7 @@ const PROJECTS = [
         ]
     },
     {
-        name : "Restaurant Management System",
+        name : "Restaurant Management",
         description : "Enterprise application for optymyzing backend operations for a private restaurant, such as placing orders, managing stocks, communication, tracking employees.",
         stack : "Android SDK 19, JavaServer Faces, Primefaces, Hibernate, Rest API, H2 Database",
         source : "https://github.com/crisstianl/restaurant-management",
